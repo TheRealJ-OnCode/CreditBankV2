@@ -511,3 +511,67 @@
     font-size: 1.3em;
     font-weight: 700;
 }
+
+.history-modal {
+    min-width: 600px;
+    max-width: 700px;
+    max-height: 80vh;
+}
+
+.logs-container {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.log-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    margin-bottom: 10px;
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.log-icon {
+    font-size: 1.2em;
+    margin-right: 10px;
+}
+
+.log-operation {
+    flex: 1;
+    font-weight: 600;
+    color: #212529;
+}
+
+.log-amount {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.1em;
+}
+
+.log-time {
+    font-size: 0.85em;
+    color: #6c757d;
+    margin-left: 30px;
+}
+
+.logs-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.logs-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.logs-container::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}

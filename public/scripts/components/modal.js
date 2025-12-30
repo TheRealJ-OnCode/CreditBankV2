@@ -11,31 +11,31 @@ function showInputModal(title, placeholder, callback) {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
+
     const modal = document.getElementById('inputModal');
     const input = document.getElementById('modalInput');
     const confirmBtn = document.getElementById('modalConfirm');
     const cancelBtn = document.getElementById('modalCancel');
-    
+
     setTimeout(() => input.focus(), 100);
-    
+
     input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') confirmBtn.click();
     });
-    
+
     confirmBtn.addEventListener('click', () => {
         const value = input.value.trim();
         modal.remove();
         callback(value);
     });
-    
+
     cancelBtn.addEventListener('click', () => {
         modal.remove();
         callback(null);
     });
-    
+
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.remove();
@@ -57,23 +57,23 @@ function showConfirmModal(message, callback) {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
+
     const modal = document.getElementById('confirmModal');
     const yesBtn = document.getElementById('confirmYes');
     const noBtn = document.getElementById('confirmNo');
-    
+
     yesBtn.addEventListener('click', () => {
         modal.remove();
         callback(true);
     });
-    
+
     noBtn.addEventListener('click', () => {
         modal.remove();
         callback(false);
     });
-    
+
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.remove();
@@ -99,15 +99,16 @@ function showInfoModal(customer) {
                     </div>
                     <div class="info-item">
                         <span class="info-label">Qalıq Borc:</span>
-                        <span class="info-value debt-value">${customer.credit}₼</span>
+                        <span class="info-value debt-value">${Number(customer.credit).toFixed(2)}₼</span>
+
                     </div>
                     <div class="info-item">
                         <span class="info-label">Başlanğıc Borc:</span>
-                        <span class="info-value">${customer.initialDebt}₼</span>
+<span class="info-value">${Number(customer.initialDebt).toFixed(2)}₼</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Son Ödəniş:</span>
-                        <span class="info-value">${customer.lastPaymentAmount || '0'}₼</span>
+<span class="info-value">${Number(customer.lastPaymentAmount || 0).toFixed(2)}₼</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Son Ödəniş Tarixi:</span>
@@ -129,17 +130,98 @@ function showInfoModal(customer) {
                     ` : ''}
                 </div>
                 <div class="modal-actions">
+                    <button class="btn-small btn-info" id="showHistory">📜 Keçmiş</button>
                     <button class="btn-small btn-primary" id="infoClose">Bağla</button>
                 </div>
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
+
     const modal = document.getElementById('infoModal');
     const closeBtn = document.getElementById('infoClose');
-    
+    const historyBtn = document.getElementById('showHistory');
+
+    closeBtn.addEventListener('click', () => modal.remove());
+
+    historyBtn.addEventListener('click', async () => {
+        modal.remove();
+        await showHistoryModal(customer.id, customer.name);
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+}
+
+async function showHistoryModal(customerId, customerName) {
+    const result = await window.electronAPI.getLogs(customerId);
+
+    if (!result.success) {
+        return throwMessage(result.message);
+    }
+
+    const logs = result.data;
+
+    const logsHTML = logs.length === 0 ? '<p style="text-align: center; color: #6c757d;">Hələ heç bir əməliyyat yoxdur</p>' : logs.map(log => {
+        let icon = '📝';
+        let color = '#667eea';
+
+        switch (log.operation) {
+            case 'ELAVE_EDILDI':
+                icon = '➕';
+                color = '#28a745';
+                break;
+            case 'ODENIS':
+                icon = '✅';
+                color = '#28a745';
+                break;
+            case 'BORC_ELAVE':
+                icon = '📈';
+                color = '#dc3545';
+                break;
+            case 'SILINDI':
+                icon = '🗑️';
+                color = '#dc3545';
+                break;
+            case 'GERI_QAYTARILDI':
+                icon = '♻️';
+                color = '#17a2b8';
+                break;
+        }
+
+        return `
+            <div class="log-item" style="border-left-color: ${color}">
+                <div class="log-header">
+                    <span class="log-icon">${icon}</span>
+                    <span class="log-operation">${log.details}</span>
+                    ${log.amount ? `<span class="log-amount">${log.amount}₼</span>` : ''}
+                </div>
+                <div class="log-time">${formatFullDate(log.timestamp)}</div>
+            </div>
+        `;
+    }).join('');
+
+    const modalHTML = `
+        <div class="modal-overlay" id="historyModal">
+            <div class="modal-content history-modal">
+                <h3>📜 ${customerName} - Keçmiş</h3>
+                <div class="logs-container">
+                    ${logsHTML}
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-small btn-primary" id="historyClose">Bağla</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modal = document.getElementById('historyModal');
+    const closeBtn = document.getElementById('historyClose');
+
     closeBtn.addEventListener('click', () => modal.remove());
     modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.remove();
@@ -149,9 +231,9 @@ function showInfoModal(customer) {
 function formatFullDate(dateString) {
     if (!dateString) return 'Məlumat yoxdur';
     const date = new Date(dateString);
-    return date.toLocaleDateString('az-AZ', { 
-        year: 'numeric', 
-        month: 'long', 
+    return date.toLocaleDateString('az-AZ', {
+        year: 'numeric',
+        month: 'long',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit'

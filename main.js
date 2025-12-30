@@ -1,10 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require("node:path");
-const { getCustomersHandler } = require('./handlers/getCustomers.handler');
-const { addCustomerHandler } = require('./handlers/addCustomer.handler');
-const { deleteCustomerHandler } = require('./handlers/deleteCustomer.handler');
-const { updateCustomerHandler } = require('./handlers/updateCustomer.handler');
-const { sqlite } = require('./db/db');
+const { getCustomersHandler } = require('./src/handlers/customer/getCustomers.handler');
+const { addCustomerHandler } = require('./src/handlers/customer/addCustomer.handler');
+const { deleteCustomerHandler } = require('./src/handlers/customer/deleteCustomer.handler');
+const { updateCustomerHandler } = require('./src/handlers/customer/updateCustomer.handler');
+const { getLogsHandler } = require('./src/handlers/logs/getLogs.handler');
+const { sqlite } = require('./src/db/db');
+
 const createWindow = () => {
     const win = new BrowserWindow({
         webPreferences: {
@@ -21,7 +23,9 @@ const createWindow = () => {
 ipcMain.handle("get-customers", getCustomersHandler);
 ipcMain.handle("add-customer", addCustomerHandler);
 ipcMain.handle("delete-customer", deleteCustomerHandler);
-ipcMain.handle("update-customer", updateCustomerHandler)
+ipcMain.handle("update-customer", updateCustomerHandler);
+ipcMain.handle("get-logs", getLogsHandler);
+
 sqlite.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,20 +33,31 @@ sqlite.exec(`
         phone TEXT,
         credit INTEGER DEFAULT 0,
         initialDebt INTEGER DEFAULT 0,
-        lastPaymentAmount TEXT,
+        lastPaymentAmount INTEGER DEFAULT 0,
         lastPaymentTime TEXT,
         specialInfo TEXT,
         startingDate TEXT,
         dateAdded TEXT,
-        goods TEXT,
         isActive INTEGER DEFAULT 1
     )
 `);
 
-app.whenReady().then(() => {
+sqlite.exec(`
+    CREATE TABLE IF NOT EXISTS logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customerId INTEGER,
+        customerName TEXT,
+        operation TEXT,
+        details TEXT,
+        amount INTEGER,
+        timestamp TEXT
+    )
+`);
 
+app.whenReady().then(() => {
     createWindow();
 })
+
 app.on("window-all-closed", () => {
     if (process.platform !== 'darwin') {
         app.quit()

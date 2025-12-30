@@ -9,9 +9,7 @@ document.addEventListener('click', async (e) => {
             `${customerName} üçün ödəniş məbləği`,
             'Məbləğ daxil edin (₼)',
             async (amount) => {
-                // ✅ Null yoxlama əlavə et
-                if (amount === null) return; // Ləğv edildisə
-                
+                if (amount === null) return; 
                 if (!amount || isNaN(amount) || Number(amount) <= 0) {
                     return throwMessage('Düzgün məbləğ daxil edin');
                 }

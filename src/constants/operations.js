@@ -1,0 +1,9 @@
+const OPERATIONS = {
+    ADDED: 'ELAVE_EDILDI',
+    PAYMENT: 'ODENIS',
+    DEBT_ADDED: 'BORC_ELAVE',
+    DELETED: 'SILINDI',
+    RESTORED: 'GERI_QAYTARILDI'
+};
+
+module.exports = { OPERATIONS };

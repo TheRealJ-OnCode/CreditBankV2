@@ -86,32 +86,24 @@
                 </div>
 
                 <div class="customer-list">
-                 
+
                 </div>
             </div>
         </div>
     </div>
     <div id="toast-container"></div>
 
-    <script>
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
-    <script src="./scripts/throwMessage.js"></script>
-    <script src="./scripts/modal.js"></script> 
-    <script src="./scripts/loadCustomers.js"></script>
-    <script src="./scripts/collectİnfo.js"></script>
-    <script src="./scripts/deleteCustomer.js"></script>
-    <script src="./scripts/restoreCustomer.js"></script>
-    <script src="./scripts/showInfo.js"></script> 
-    <script src="./scripts/payment.js"></script>
-    <script src="./scripts/addDebt.js"></script>
-    <script src="./scripts/search.js"></script>
-    <script src="./scripts/filter.js"></script>
+    <script src="./scripts/components/throwMessage.js"></script>
+    <script src="./scripts/components/modal.js"></script>
+    <script src="./scripts/utils/loadCustomers.js"></script>
+    <script src="./scripts/utils/collectİnfo.js"></script>
+    <script src="./scripts/handlers/deleteCustomer.js"></script>
+    <script src="./scripts/handlers/restoreCustomer.js"></script>
+    <script src="./scripts/handlers/showInfo.js"></script>
+    <script src="./scripts/handlers/payment.js"></script>
+    <script src="./scripts/handlers/addDebt.js"></script>
+    <script src="./scripts/utils/search.js"></script>
+    <script src="./scripts/utils/filter.js"></script>
 </body>
 
 </html>
