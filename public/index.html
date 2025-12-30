@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mağaza Dəftəri</title>
+    <link rel="stylesheet" href="./assets/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>📒 Mağaza Dəftəri</h1>
+            <p class="subtitle">Borc İzləmə Sistemi</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Ümumi Müştəri</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3.450₼</div>
+                <div class="stat-label">Ümumi Qalıq Borc</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Bu Ay Əlavə Edilib</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="add-section">
+                <h2>➕ Yeni Müştəri</h2>
+                <div id="customerForm">
+                    <div class="form-group">
+                        <label for="name">Ad *</label>
+                        <input type="text" id="name" class="form-input" name="name" placeholder="Müştəri adı" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefon <span class="optional-label">(istəyə görə)</span></label>
+                        <input type="tel" id="phone" class="form-input" name="phone" placeholder="050 123 45 67">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="credit">Qalıq Borc (₼)</label>
+                        <input type="number" id="credit" class="form-input" name="credit" placeholder="0.00" step="0.01"
+                            value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="initialDebt">Başlanğıc Borc (₼)</label>
+                        <input type="number" id="initialDebt" class="form-input" name="initialDebt" placeholder="0.00"
+                            step="0.01" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialInfo">Xüsusi Qeyd <span class="optional-label">(mallar və s.)</span></label>
+                        <textarea id="specialInfo" name="specialInfo" placeholder="Məs: 2 çörək, 1 süd, çay"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="startingDate">Başlanğıc Tarixi <span class="optional-label">(istəyə
+                                görə)</span></label>
+                        <input type="date" id="startingDate" class="form-input" name="startingDate">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary add-customer">Müştəri Əlavə Et</button>
+                </div>
+            </div>
+
+            <div class="list-section">
+                <div class="list-header">
+                    <h2>👥 Müştərilər</h2>
+                    <div class="filter-group">
+                        <button class="filter-btn active">Hamısı</button>
+                        <button class="filter-btn">Borclu</button>
+                        <button class="filter-btn">Borcsuz</button>
+                        <button class="filter-btn">Silinənlər</button>
+                    </div>
+                </div>
+
+                <div class="search-box">
+                    <input type="search" placeholder="🔍 Müştəri axtar...">
+                </div>
+
+                <div class="customer-list">
+                    <!-- Müştəri Kartı 1 -->
+                    <div class="customer-card">
+                        <div class="customer-header">
+                            <div class="customer-name">👤 Əhməd Yılmaz</div>
+                            <div class="customer-debt">450₼</div>
+                        </div>
+                        <div class="customer-info">
+                            📞 0555 123 4567 • Son əməliyyat: 2 gün əvvəl
+                        </div>
+                        <div class="customer-info">
+                            📝 2 çörək, 1 süd, çay
+                        </div>
+                        <div class="customer-actions">
+                            <button class="btn-small btn-success">✅ Ödəniş</button>
+                            <button class="btn-small btn-info">➕ Borc Əlavə Et</button>
+                            <button class="btn-small btn-danger">🗑️ Sil</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container"></div>
+
+    <script>
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+    <script src="./scripts/throwMessage.js"></script>
+    <script src="./scripts/collectİnfo.js"></script>
+</body>
+
+</html>
