@@ -25,15 +25,14 @@ ipcMain.handle("add-customer", addCustomerHandler);
 ipcMain.handle("delete-customer", deleteCustomerHandler);
 ipcMain.handle("update-customer", updateCustomerHandler);
 ipcMain.handle("get-logs", getLogsHandler);
-
 sqlite.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         phone TEXT,
-        credit INTEGER DEFAULT 0,
-        initialDebt INTEGER DEFAULT 0,
-        lastPaymentAmount INTEGER DEFAULT 0,
+        credit REAL DEFAULT 0,
+        initialDebt REAL DEFAULT 0,
+        lastPaymentAmount REAL DEFAULT 0,
         lastPaymentTime TEXT,
         specialInfo TEXT,
         startingDate TEXT,
@@ -49,11 +48,10 @@ sqlite.exec(`
         customerName TEXT,
         operation TEXT,
         details TEXT,
-        amount INTEGER,
+        amount REAL,
         timestamp TEXT
     )
 `);
-
 app.whenReady().then(() => {
     createWindow();
 })

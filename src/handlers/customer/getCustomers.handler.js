@@ -6,14 +6,7 @@ const getCustomersHandler = async () => {
     try {
         const customers = await db.select().from(userSchema);
         
-        const formattedCustomers = customers.map(c => ({
-            ...c,
-            credit: c.credit / 100,
-            initialDebt: c.initialDebt / 100,
-            lastPaymentAmount: c.lastPaymentAmount ? c.lastPaymentAmount / 100 : 0
-        }));
-        
-        return Response.Success("Müştərilər uğurla gətirildi", formattedCustomers);
+        return Response.Success("Müştərilər uğurla gətirildi", customers);
     } catch (error) {
         return Response.Error("Müştərilər gətirilərkən xəta baş verdi", error.message);
     }

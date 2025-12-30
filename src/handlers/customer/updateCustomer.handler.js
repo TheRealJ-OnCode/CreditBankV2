@@ -3,7 +3,7 @@ const { db } = require("../../db/db");
 const { userSchema } = require("../../schema/schema");
 const { eq } = require("drizzle-orm");
 const { createLog } = require("../../utils/logHelper");
-const { parseMoneyInput, safeSubtract, safeAdd } = require("../../utils/matHelper");
+const { parseAmount } = require("../../utils/matHelper");
 
 const updateCustomerHandler = async (event, customerId, customerData) => {
     try {
@@ -13,17 +13,11 @@ const updateCustomerHandler = async (event, customerId, customerData) => {
         
         if (customerData.name !== undefined) updateData.name = customerData.name;
         if (customerData.phone !== undefined) updateData.phone = customerData.phone || null;
-        if (customerData.credit !== undefined) {
-            updateData.credit = Math.round(parseMoneyInput(customerData.credit) * 100);
-        }
-        if (customerData.initialDebt !== undefined) {
-            updateData.initialDebt = Math.round(parseMoneyInput(customerData.initialDebt) * 100);
-        }
+        if (customerData.credit !== undefined) updateData.credit = parseAmount(customerData.credit);
+        if (customerData.initialDebt !== undefined) updateData.initialDebt = parseAmount(customerData.initialDebt);
         if (customerData.specialInfo !== undefined) updateData.specialInfo = customerData.specialInfo || null;
         if (customerData.startingDate !== undefined) updateData.startingDate = customerData.startingDate || null;
-        if (customerData.lastPaymentAmount !== undefined) {
-            updateData.lastPaymentAmount = Math.round(parseMoneyInput(customerData.lastPaymentAmount) * 100);
-        }
+        if (customerData.lastPaymentAmount !== undefined) updateData.lastPaymentAmount = parseAmount(customerData.lastPaymentAmount);
         if (customerData.lastPaymentTime !== undefined) updateData.lastPaymentTime = customerData.lastPaymentTime || null;
         if (customerData.isActive !== undefined) updateData.isActive = customerData.isActive;
         
@@ -45,7 +39,7 @@ const updateCustomerHandler = async (event, customerId, customerData) => {
                 customer[0].name,
                 "ODENIS",
                 `Ödəniş edildi`,
-                Math.round(parseMoneyInput(customerData.lastPaymentAmount) * 100)
+                parseAmount(customerData.lastPaymentAmount)
             );
         } else if (updateData.credit && updateData.credit > customer[0].credit) {
             const addedDebt = updateData.credit - customer[0].credit;

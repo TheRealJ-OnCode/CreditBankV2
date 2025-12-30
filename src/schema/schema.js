@@ -1,12 +1,12 @@
-const { sqliteTable, integer, text } = require("drizzle-orm/sqlite-core");
+const { sqliteTable, integer, text, real } = require("drizzle-orm/sqlite-core");
 
 const userSchema = sqliteTable("users", {
     id: integer("id").primaryKey({ autoIncrement: true }),
     name: text("name"),
     phone: text("phone"),
-    credit: integer("credit"),
-    initialDebt: integer("initialDebt"),
-    lastPaymentAmount: integer("lastPaymentAmount").default(0),
+    credit: real("credit").default(0),
+    initialDebt: real("initialDebt").default(0),
+    lastPaymentAmount: real("lastPaymentAmount").default(0),
     lastPaymentTime: text("lastPaymentTime"),
     specialInfo: text("specialInfo"),
     startingDate: text("startingDate"),
@@ -20,7 +20,7 @@ const logSchema = sqliteTable("logs", {
     customerName: text("customerName"),
     operation: text("operation"),
     details: text("details"),
-    amount: integer("amount"),
+    amount: real("amount"),
     timestamp: text("timestamp")
 })
 

@@ -18,12 +18,7 @@ const getLogsHandler = async (event, customerId) => {
                 .limit(100);
         }
         
-        const formattedLogs = logs.map(log => ({
-            ...log,
-            amount: log.amount ? (log.amount / 100).toFixed(2) : null
-        }));
-        
-        return Response.Success("Loglar uğurla gətirildi", formattedLogs);
+        return Response.Success("Loglar uğurla gətirildi", logs);
     } catch (error) {
         console.log(error);
         return Response.Error("Loglar gətirilərkən xəta baş verdi", error.message);
